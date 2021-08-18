@@ -9,12 +9,12 @@ resource "aws_vpc" "nginx_vpc" {
 
 locals {
   public_subnets = {
-    "${var.aws_region}a" = "10.10.101.0/24"
-    "${var.aws_region}b" = "10.10.102.0/24"
+    "${var.aws_region}a" = "10.0.101.0/24"
+    "${var.aws_region}b" = "10.0.102.0/24"
   }
   private_subnets = {
-    "${var.aws_region}a" = "10.10.201.0/24"
-    "${var.aws_region}b" = "10.10.202.0/24"
+    "${var.aws_region}a" = "10.0.201.0/24"
+    "${var.aws_region}b" = "10.0.202.0/24"
   }
 }
 
