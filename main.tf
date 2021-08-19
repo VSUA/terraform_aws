@@ -15,3 +15,10 @@ provider "aws" {
 module "network" {
   source = "./modules/network"
 }
+
+module "nginx" {
+  source = "./modules/nginx"
+  aws_vpc_id = module.network.aws_vpc_id
+  aws_priv_subnet = module.network.aws_priv_subnet
+  aws_pub_subnet = module.network.aws_pub_subnet
+}
