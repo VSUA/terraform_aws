@@ -18,7 +18,13 @@ resource "aws_security_group" "http_sg" {
     }
 }
 
-
+data "template_file" "test" {
+  template = <<-EOF
+   #!/bin/bash
+   sudo dnf install -y nginx
+   sudo systemctl start nginx
+  EOF
+}
 //.public.*.id
 resource "aws_lb" "nginx" {
   name               = "nginx-lb"
@@ -33,11 +39,7 @@ resource "aws_launch_template" "nginx" {
   image_id      = "ami-06ec8443c2a35b0ba"
   instance_type = "t2.micro"
   vpc_security_group_ids = [aws_security_group.http_sg.id]
-  user_data = <<EOF
-              #!/bin/bash
-              sudo dnf install -y nginx
-              sudo systemctl start nginx
-  EOF
+  user_data = base64encode(data.template_file.test.rendered)
 }
 
 resource "aws_autoscaling_group" "bar" {
