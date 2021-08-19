@@ -33,11 +33,11 @@ resource "aws_launch_template" "nginx" {
   image_id      = "ami-06ec8443c2a35b0ba"
   instance_type = "t2.micro"
   vpc_security_group_ids = [aws_security_group.http_sg.id]
-  user_data = <<-EOF
+  user_data = <<EOF
               #!/bin/bash
               sudo dnf install -y nginx
               sudo systemctl start nginx
-              EOF
+  EOF
 }
 
 resource "aws_autoscaling_group" "bar" {
