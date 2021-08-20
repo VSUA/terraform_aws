@@ -4,6 +4,12 @@ terraform {
       source = "hashicorp/aws"
     }
   }
+  backend "s3" {
+    bucket = "terraformstatenginx"
+    key = "global/s3/terraform.tfstate"
+    region = "eu-central-1"
+    dynamodb_table = "terraformstate"
+  }
 }
 
 provider "aws" {
