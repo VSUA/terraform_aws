@@ -25,6 +25,14 @@ data "template_file" "test" {
    sudo systemctl start nginx
   EOF
 }
+
+resource "aws_lb_target_group" "nginx-tg" {
+  name     = "nginx-lb-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = var.aws_vpc_id
+}
+
 //.public.*.id
 resource "aws_lb" "nginx" {
   name               = "nginx-lb"
@@ -32,6 +40,15 @@ resource "aws_lb" "nginx" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.http_sg.id]
   subnets            = var.aws_pub_subnet.*.id
+}
+
+resource "aws_lb_listener" "example" {
+  load_balancer_arn = aws_lb.nginx.id
+
+  default_action {
+    target_group_arn = aws_lb_target_group.nginx-tg.arn
+    type             = "forward"
+  }
 }
 
 resource "aws_launch_template" "nginx" {
@@ -47,7 +64,7 @@ resource "aws_autoscaling_group" "bar" {
   max_size           = 4
   min_size           = 2
   vpc_zone_identifier = var.aws_priv_subnet.*.id
-  target_group_arns = [aws_lb.nginx.arn]
+  target_group_arns = [aws_lb_target_group.nginx-tg.arn]
   launch_template {
     id      = aws_launch_template.nginx.id
     version = "$Latest"
