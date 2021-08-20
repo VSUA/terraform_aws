@@ -49,6 +49,7 @@ resource "aws_lb_listener" "example" {
     target_group_arn = aws_lb_target_group.nginx-tg.arn
     type             = "forward"
   }
+  port = 80
 }
 
 resource "aws_launch_template" "nginx" {
