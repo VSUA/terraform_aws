@@ -27,7 +27,7 @@ data "template_file" "test" {
 }
 
 resource "aws_lb_target_group" "nginx-tg" {
-  name     = "nginx-lb-tg"
+  name     = "${var.service_name}-lb-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.aws_vpc_id
@@ -35,7 +35,7 @@ resource "aws_lb_target_group" "nginx-tg" {
 
 //.public.*.id
 resource "aws_lb" "nginx" {
-  name               = "nginx-lb"
+  name               = "${var.service_name}-lb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.http_sg.id]
@@ -53,7 +53,7 @@ resource "aws_lb_listener" "example" {
 }
 
 resource "aws_launch_template" "nginx" {
-  name_prefix   = "nginx"
+  name_prefix   = "${var.service_name}-"
   image_id      = "ami-06ec8443c2a35b0ba"
   instance_type = "t2.micro"
   vpc_security_group_ids = [aws_security_group.http_sg.id]

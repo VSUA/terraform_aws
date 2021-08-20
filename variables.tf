@@ -12,3 +12,7 @@ variable "aws_access_key" {
 variable "aws_secret_key" {
   type = string
 }
+
+variable "service_name" {
+  default = "nginx"
+}

@@ -9,3 +9,7 @@ variable "aws_pub_subnet" {
 variable "aws_priv_subnet" {
   default = ""
 }
+
+variable "service_name" {
+  default = "service"
+}

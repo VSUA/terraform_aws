@@ -3,7 +3,7 @@ resource "aws_vpc" "nginx_vpc" {
   instance_tenancy = "default"
 
   tags = {
-    Name = "nginx-vpc"
+    Name = "${var.service_name}-vpc"
   }
 }
 
@@ -24,7 +24,7 @@ resource "aws_subnet" "nginx_priv_subnets" {
   cidr_block = element(values(local.private_subnets), count.index)
   availability_zone = element(keys(local.private_subnets), count.index)
   tags = {
-    Name = "nginx-priv-sn-${count.index + 1}"
+    Name = "${var.service_name}-priv-sn-${count.index + 1}"
   }
 }
 
@@ -35,7 +35,7 @@ resource "aws_subnet" "nginx_pub_subnets" {
   availability_zone = element(keys(local.public_subnets), count.index)
   map_public_ip_on_launch = true
   tags = {
-    Name = "nginx-pub-sn-${count.index + 1}"
+    Name = "${var.service_name}-pub-sn-${count.index + 1}"
   }
 }
 
@@ -43,7 +43,7 @@ resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.nginx_vpc.id
 
   tags = {
-    Name = "nginx-ig"
+    Name = "${var.service_name}-ig"
   }
 }
 
@@ -89,7 +89,7 @@ resource "aws_eip" "nat" {
   vpc = true
 
   tags = {
-    Name = "nginx-eip"
+    Name = "${var.service_name}-eip"
   }
 }
 
@@ -98,6 +98,6 @@ resource "aws_nat_gateway" "this" {
   subnet_id     = aws_subnet.nginx_pub_subnets[0].id
 
   tags = {
-    Name = "nginx-nat-gw"
+    Name = "${var.service_name}-nat-gw"
   }
 }

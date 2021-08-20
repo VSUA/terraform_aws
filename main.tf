@@ -20,6 +20,8 @@ provider "aws" {
 
 module "network" {
   source = "./modules/network"
+  service_name = var.service_name
+  aws_region = var.aws_region
 }
 
 module "nginx" {
@@ -27,4 +29,5 @@ module "nginx" {
   aws_vpc_id = module.network.aws_vpc_id
   aws_priv_subnet = module.network.aws_priv_subnet
   aws_pub_subnet = module.network.aws_pub_subnet
+  service_name = var.service_name
 }
